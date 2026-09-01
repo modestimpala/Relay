@@ -1,0 +1,24 @@
+# RelayCpp gate settings (PLAN.md §M5)
+#
+# Copy to `shimloader/cfg/relay_gates.ini` if you need the options below.
+# Without this file, gating works for mod-owned and shipped game Blueprints.
+#
+# A "gate" rewrites a Blueprint function's bytecode so Relay can cancel the
+# call (Params.Cancel(), or an RPC declared bLocalAlso=false). Shipped game
+# functions are permitted by default because vanilla-function routing and
+# suppression are core Relay use cases; the setting below is the operator
+# exclusion switch.
+
+# Master switch. 1 = gating works (default), 0 = never patch anything, so
+# Cancel() warns instead of cancelling. Flip to 0 to rule the gate out of any
+# hang or misbehaviour in a single run.
+enabled=1
+
+# Log each assembled gate prologue as hex. Diagnostic only; normally leave off.
+dump_prologue=0
+
+# Allow gating SHIPPED game functions (anything outside /Game/Mods/).
+# This lets a mod cancel vanilla logic - doors that never open, damage that
+# never applies, saves that never write. Powerful and easy to get wrong.
+# 0 = refuse with a log, 1 = permit (default).
+allow_game_functions=1

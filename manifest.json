@@ -1,0 +1,9 @@
+{
+    "name": "Relay",
+    "version_number": "0.8.0",
+    "website_url": "https://github.com/modestimpala/Relay",
+    "description": "Blueprint API for function hooks, UDP networking, and actor replication. Enables mods to observe/modify calls, register game features, and build multiplayer without C++.",
+    "dependencies": [
+        "Thunderstore-unreal_shimloader-1.1.7"
+    ]
+}

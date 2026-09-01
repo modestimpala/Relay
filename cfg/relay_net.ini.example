@@ -1,0 +1,41 @@
+# RelayCpp network settings
+#
+# This file is needed on machines that host or opt into local diagnostics.
+# Joining a game requires no network INI. Copy it to the profile-persistent
+#   ...\profiles\<profile>\shimloader\cfg\relay_net.ini
+#
+# Relay_NetHost carries the per-session settings: Port, BindAddress,
+# PublicAddress, MaxPeers, Channels, Password, and AllowPasswordlessAuthority.
+# Leave BindAddress blank for normal LAN/Internet hosting. PublicAddress affects
+# the shareable direct friend code; it does not change which interface listens.
+
+# Mirror VotV hint popups into the UE4SS console/log. This diagnostic is noisy.
+# 0 = do not install the hint tap (default). 1 = print every hint.
+log_votv_hints=0
+
+# Hosting is an explicit player/operator opt-in because it opens a UDP listener.
+# 0 = Relay_NetHost returns null with an actionable Reason. 1 = allow hosting.
+allow_listen=0
+
+# Hard operator cap. Relay_NetHost may request fewer peers, never more.
+max_peers=8
+
+# Name shown by Relay_NetDiscover on the LAN. Blank = "VotV (Relay)".
+server_name=
+
+# Optional rendezvous service as host:port. Blank = direct/LAN connections only.
+# When configured, Relay_NetFriendCode returns the rendezvous code by default;
+# clients need only paste that code into Relay_NetConnect's Address pin.
+rendezvous_address=
+
+# With rendezvous enabled, accept inbound connections only after the service has
+# authorized a live punch attempt. 0 keeps ordinary direct connections enabled.
+punch_only=0
+
+# Optional mod-author rule profile. Relative paths resolve under shimloader/cfg.
+# Blank disables file-backed rules; Blueprint Relay_NetBindClass calls still work.
+rules_profile=relay_rules.json
+
+# Relay manages host identity, known-host pins, transport limits, pacing,
+# replication repair, spawn safety, and admission limits with shipped defaults.
+# Those internal/test settings are intentionally omitted from this public file.
