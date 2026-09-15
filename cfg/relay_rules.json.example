@@ -1,0 +1,998 @@
+{
+  "schema": "relay.rules.v1",
+  "game": "dumped by relay_net.ini rules_dump=1",
+  "rules": [
+    {
+      "class": "/Game/objects/actorChipPile.actorChipPile_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 20,
+      "relevancy_radius": 3000,
+      "per_peer": false,
+      "population_identity": true,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [],
+      "routed": [
+        {
+          "function": "playerGrabbed",
+          "instigator": "Player"
+        },
+        {
+          "function": "BndEvt__actorChipPile_collision_K2Node_ComponentBoundEvent_0_ComponentBeginOverlapSignature__DelegateSignature",
+          "suppress_on_non_authority": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/trashBitsPile.trashBitsPile_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 20,
+      "relevancy_radius": 3000,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [],
+      "routed": [
+        {
+          "function": "playerGrabbed",
+          "instigator": "Player"
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/prop_garbageClump.prop_garbageClump_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 20,
+      "relevancy_radius": 3000,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [],
+      "routed": [
+        {
+          "function": "BndEvt__prop_garbageClump_StaticMesh_K2Node_ComponentBoundEvent_0_ComponentHitSignature__DelegateSignature",
+          "suppress_on_non_authority": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/panel_SATconsole.panel_SATconsole_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "widget.consoleLine",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "fixLog"
+        }
+      ]
+    },
+    {
+      "class": "/Game/main/mainPlayer.mainPlayer_C",
+      "source": "blueprint",
+      "include_children": false,
+      "authority": "Owner",
+      "presence": "SpawnProxy",
+      "remote_class": "/Game/Mods/RelayTest2/BP_mainPlayerChildTest.BP_mainPlayerChildTest_C",
+      "preset": "Transform",
+      "send_hz": 25,
+      "relevancy_radius": 0,
+      "per_peer": true,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "light_R.bVisible",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "light_R.Intensity",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "flashlight",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "$CameraLocation",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": true,
+          "interp_type": 1,
+          "mode": 0
+        },
+        {
+          "name": "$CameraRotation",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": true,
+          "interp_type": 3,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/door.door_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "cantClose",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "jammed",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "doorOpen",
+          "replay_same_function": true
+        },
+        {
+          "function": "doorClose",
+          "replay_same_function": true
+        },
+        {
+          "function": "jam",
+          "replay_same_function": true
+        },
+        {
+          "function": "hack",
+          "replay_same_function": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/prop_lamp.prop_lamp_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 20,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": true,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "PointLight.Intensity",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/prop.prop_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "TransformAttach",
+      "send_hz": 20,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": true,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "quiesce": "physicsImpact.unbreakable=true",
+      "fields": [
+        {
+          "name": "Key",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "nametag",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Name",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/misc/daynightCycle.daynightCycle_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "quiesce": "rainProbability=0;fogProbability=0;enable_superfog=false",
+      "fields": [
+        {
+          "name": "totalTime",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Day",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "TimeScale",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "func_newHour",
+          "suppress_on_non_authority": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/misc/explosion.explosion_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "SpawnIfMissing",
+      "preset": "Transform",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "Force",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Radius",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Damage",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/ATV.ATV_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindOrSpawn",
+      "preset": "Transform",
+      "send_hz": 20,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "fuel",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "health",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rotAlpha",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Brake",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "turnForce",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "light_L.Intensity",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "light_L.bVisible",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "light_R.Intensity",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "light_R.bVisible",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/lightswitch.lightswitch_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "A",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "use",
+          "replay_same_function": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/drone.drone_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 20,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "loadData",
+      "spawn_payload_apply": "getData",
+      "fields": [
+        {
+          "name": "flyingType",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "ind",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Direction",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "isGrabbing",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "pickedUp",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Active",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "hasOrder",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Point",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "hasSack",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "order",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/garage.garage_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "Transform",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "mov",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Open",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "acivae",
+          "replay_same_function": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/radiotower.radiotower_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "Transform",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "IsBroken",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/misc/windturbine.windturbine_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "Transform",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "alpha_blades",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Speed",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "headRotation",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "targetRot",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rot",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/misc/coordRadarDish.coordRadarDish_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "None",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "IsBroken",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/grime.grime_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": true,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "Type",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "process",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "maxProcess",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "cleanStrength",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "clean",
+          "replay_same_function": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/bloodCLot.bloodClot_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": []
+    },
+    {
+      "class": "/Game/objects/effect_bloodLoss.effect_bloodLoss_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": []
+    },
+    {
+      "class": "/Game/main/mainGamemode.mainGamemode_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "quiesce": "dreamProbability=0",
+      "fields": [
+        {
+          "name": "savedSignals_0",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/undergroundGarbageSpawner.undergroundGarbageSpawner_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "quiesce": "landscape=None;skipLandscape=false",
+      "fields": []
+    },
+    {
+      "class": "/Game/objects/dirthole_item.dirthole_item_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 1,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "quiesce": "time=1e30",
+      "fields": [
+        {
+          "name": "Key",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "Data",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/locker.locker_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "opened",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "head",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "Open",
+          "replay_same_function": true
+        },
+        {
+          "function": "Play",
+          "replay_same_function": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/actor_save.actor_save_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 10,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "Key",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/spaceRenderer.spaceRenderer_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 20,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [],
+      "routed": [
+        {
+          "function": "spawnSignal",
+          "suppress_on_non_authority": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/triggers/trigger_eventer.trigger_eventer_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 20,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [],
+      "routed": [
+        {
+          "function": "runEvent",
+          "suppress_on_non_authority": true
+        },
+        {
+          "function": "runSpecialEvent",
+          "suppress_on_non_authority": true
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/roz_anim.roz_anim_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": true,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": []
+    }
+  ]
+}

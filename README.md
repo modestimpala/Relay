@@ -413,6 +413,43 @@ An explicit `Relay_NetBindClass` rule still takes priority over a profile rule
 for the same class. Load the same accepted rules on every peer before
 replication starts.
 
+### Classes that must stay local
+
+Some actors are *subjective*. They're spawned from local per-player state, so
+every machine already makes its own. VotV's hunger hallucinations are a good
+example: the gamemode checks **this** machine's food level and spawns a
+`prop_burgerHallucinate_C` next to **this** player. If you replicate one, the
+other player sees a prop that shouldn't exist for them, and it wastes an
+ObjectId.
+
+A class rule also matches subclasses, so a broad rule (like one on `prop_C`)
+will catch these too. Exclude them next to your `Relay_NetBindClass` call, in
+either order:
+
+```text
+Relay_NetExcludeClass(Class, bIncludeChildren=true) -> Success
+```
+
+Or do the same thing in the public INI, with no asset work needed:
+
+```text
+exclude_classes=/Game/objects/prop_burgerHallucinate.prop_burgerHallucinate_C
+exclude_class_trees=/Game/objects/eyer
+```
+
+`exclude_classes` names one class. `exclude_class_trees` names a class and all
+its subclasses. Both accept a full object path or just the package name
+(`/Game/objects/eyer` matches `eyer_C`), and can be comma- or
+semicolon-separated. They're case-insensitive.
+
+A few things to know: exclusion only overrides rules inherited from a **base**
+class - a rule written for the excluded class itself still binds it. That's
+also how you opt a class back in, since there's no separate un-exclude call.
+Rules reset on map travel, so re-declare exclusions after each trip. An
+excluded actor never registers, announces, or gets a NetId. And exclusion is a
+local-only decision: if one peer excludes a class, that peer just won't see it
+- it has no effect on other peers.
+
 ### Fields
 
 A field name can be a reflected property such as `Health`, an object-relative
@@ -625,10 +662,15 @@ server_name=
 rendezvous_address=
 punch_only=0
 rules_profile=relay_rules.json
+exclude_classes=
+exclude_class_trees=
 ```
 
 Set `log_votv_hints=1` only while correlating VotV popup text with UE4SS logs.
 It is `0` by default, so Relay does not install the hint tap.
+
+`exclude_classes` / `exclude_class_trees` keep subjective actors out of
+inherited class rules - see "Classes that must stay local".
 
 ### `relay_gates.ini`
 
@@ -704,6 +746,7 @@ transport was used.
 | Node | Result |
 |---|---|
 | `Relay_NetBindClass` | Class-rule handle. |
+| `Relay_NetExcludeClass` | Keep a subjective class out of rules inherited from its base. |
 | `Relay_NetLoadRulesJson` | Add `relay.rules.v1` rules from a Blueprint string; returns whether the document is valid. |
 | `Relay_NetRegisterActor`, `Relay_NetUnregisterActor`, `Relay_NetBind` | Explicit actor registration/binding. |
 | `Relay_NetIdFor`, `Relay_NetFindByKey`, `Relay_NetRuleBoundActors` | Current object queries. |
