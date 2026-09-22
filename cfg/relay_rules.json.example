@@ -46,7 +46,22 @@
       "interp_type": 0,
       "spawn_payload_capture": "getData",
       "spawn_payload_apply": "loadData",
-      "fields": [],
+      "fields": [
+        {
+          "name": "amountA",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "amountB",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
       "routed": [
         {
           "function": "playerGrabbed",
@@ -109,7 +124,7 @@
       "include_children": false,
       "authority": "Owner",
       "presence": "SpawnProxy",
-      "remote_class": "/Game/Mods/RelayTest2/BP_mainPlayerChildTest.BP_mainPlayerChildTest_C",
+      "remote_class": "/Game/Mods/RelayExampleUI/BP_mainPlayerChild_Proxy.BP_mainPlayerChild_Proxy_C",
       "preset": "Transform",
       "send_hz": 25,
       "relevancy_radius": 0,
@@ -182,6 +197,13 @@
         },
         {
           "name": "jammed",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "isOpened",
           "condition": "OnChange",
           "quant": "Float32",
           "interp": false,
@@ -304,10 +326,67 @@
           "condition": "OnChange",
           "quant": "Float32",
           "interp": false,
-          "mode": 0
+          "mode": 0,
+          "on_rep": "updateWeekDay"
         },
         {
           "name": "TimeScale",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "isRaining",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rainStrength",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rainLightningChance",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rainDeactivateChance",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rainWindSpeed",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "isSnow",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "rain",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "thickFog",
           "condition": "OnChange",
           "quant": "Float32",
           "interp": false,
@@ -320,6 +399,59 @@
           "suppress_on_non_authority": true
         }
       ]
+    },
+    {
+      "class": "/Game/objects/weatherFogController.weatherFogController_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "None",
+      "send_hz": 1,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "duration",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "fogPhase",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "strength",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "permanent",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "time",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": []
     },
     {
       "class": "/Game/objects/misc/explosion.explosion_C",
@@ -446,7 +578,7 @@
       "authority": "Host",
       "presence": "Auto",
       "preset": "Transform",
-      "send_hz": 5,
+      "send_hz": 20,
       "relevancy_radius": 0,
       "per_peer": false,
       "population_identity": false,
@@ -464,10 +596,35 @@
       ],
       "routed": [
         {
-          "function": "use",
-          "replay_same_function": true
+          "function": "use"
         }
       ]
+    },
+    {
+      "class": "/Game/objects/triggers/trigger_lightRoot.trigger_lightRoot_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "None",
+      "send_hz": 20,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "isActive",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "updLig"
+        }
+      ],
+      "routed": []
     },
     {
       "class": "/Game/objects/drone.drone_C",
@@ -483,8 +640,8 @@
       "key_continuity": false,
       "kinematic_receivers": false,
       "interp_type": 0,
-      "spawn_payload_capture": "loadData",
-      "spawn_payload_apply": "getData",
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
       "fields": [
         {
           "name": "flyingType",
@@ -555,6 +712,27 @@
           "quant": "Float32",
           "interp": false,
           "mode": 0
+        },
+        {
+          "name": "leaveAfter5min",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "canTakeOff",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "alarmCount",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
         }
       ]
     },
@@ -565,7 +743,7 @@
       "authority": "Host",
       "presence": "BindExisting",
       "preset": "Transform",
-      "send_hz": 5,
+      "send_hz": 20,
       "relevancy_radius": 0,
       "per_peer": false,
       "population_identity": false,
@@ -590,8 +768,7 @@
       ],
       "routed": [
         {
-          "function": "acivae",
-          "replay_same_function": true
+          "function": "acivae"
         }
       ]
     },
@@ -807,6 +984,13 @@
           "quant": "Float32",
           "interp": false,
           "mode": 0
+        },
+        {
+          "name": "saveSlot.points",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
         }
       ]
     },
@@ -931,6 +1115,151 @@
       ]
     },
     {
+      "class": "/Game/objects/cordSocket.cordSocket_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 10,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "Key",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "powered",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/alarmLamp.alarmLamp_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 10,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "Key",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "active",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/growingPlant.growingPlant_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 2,
+      "relevancy_radius": 3000,
+      "identity_ready_on": "loadData",
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": true,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "Key",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "grow",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "fruitGrow",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "water",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "dryness",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "fertilizer",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "amount",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "grew",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "quiesce": "CustomTimeDilation=0"
+    },
+    {
       "class": "/Game/objects/spaceRenderer.spaceRenderer_C",
       "source": "blueprint",
       "include_children": true,
@@ -953,30 +1282,70 @@
       ]
     },
     {
-      "class": "/Game/objects/triggers/trigger_eventer.trigger_eventer_C",
+      "class": "/Game/objects/powerControl.powerControl_C",
       "source": "blueprint",
       "include_children": true,
       "authority": "Host",
-      "presence": "Auto",
+      "presence": "BindExisting",
       "preset": "None",
-      "send_hz": 20,
+      "send_hz": 5,
       "relevancy_radius": 0,
       "per_peer": false,
       "population_identity": false,
       "key_continuity": false,
       "kinematic_receivers": false,
       "interp_type": 0,
-      "fields": [],
-      "routed": [
+      "fields": [
         {
-          "function": "runEvent",
-          "suppress_on_non_authority": true
+          "name": "press_coord",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "buttonsVisibility"
         },
         {
-          "function": "runSpecialEvent",
-          "suppress_on_non_authority": true
+          "name": "press_downl",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "buttonsVisibility"
+        },
+        {
+          "name": "press_play",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "buttonsVisibility"
+        },
+        {
+          "name": "press_calc",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "buttonsVisibility"
+        },
+        {
+          "name": "press_light",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "buttonsVisibility"
+        },
+        {
+          "name": "disabled",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "buttonsVisibility"
         }
-      ]
+      ],
+      "routed": []
     },
     {
       "class": "/Game/objects/roz_anim.roz_anim_C",
@@ -993,6 +1362,227 @@
       "kinematic_receivers": false,
       "interp_type": 0,
       "fields": []
+    },
+    {
+      "class": "/Game/test/analogDScreenTest.analogDScreenTest_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "None",
+      "send_hz": 10,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "widget.ui_coordinates.coordinate_0",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "updCursorLocations"
+        },
+        {
+          "name": "widget.ui_coordinates.coordinate_1",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "updCursorLocations"
+        },
+        {
+          "name": "widget.ui_coordinates.coordinate_2",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "updCursorLocations"
+        },
+        {
+          "name": "widget.ui_coordinates.viewCoordinate",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "updCursorLocations"
+        },
+        {
+          "name": "widget.ui_coordinates.selected",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "updCursorLocations"
+        },
+        {
+          "name": "widget.ui_coordinates.coordinate_middle",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "widget.ui_coordinates.exploreMode",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "widget.ui_coordinates.canPing",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "widget.ui_coordinates.triangle_position",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": [
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_switchToCoord1_K2Node_ComponentBoundEvent_2_ComponentOnClickedSignature__DelegateSignature"
+        },
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_switchToCoord2_K2Node_ComponentBoundEvent_3_ComponentOnClickedSignature__DelegateSignature"
+        },
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_switchToCoord3_K2Node_ComponentBoundEvent_4_ComponentOnClickedSignature__DelegateSignature"
+        },
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_bringCoord1_K2Node_ComponentBoundEvent_5_ComponentOnClickedSignature__DelegateSignature"
+        },
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_bringCoord3_K2Node_ComponentBoundEvent_6_ComponentOnClickedSignature__DelegateSignature"
+        },
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_bringCoord2_K2Node_ComponentBoundEvent_7_ComponentOnClickedSignature__DelegateSignature"
+        },
+        {
+          "function": "BndEvt__analogDScreenTest_screenbutton_bringCoordCent_K2Node_ComponentBoundEvent_8_ComponentOnClickedSignature__DelegateSignature"
+        }
+      ]
+    },
+    {
+      "class": "/Game/objects/laptop.laptop_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "Auto",
+      "preset": "Transform",
+      "send_hz": 10,
+      "relevancy_radius": 3000,
+      "per_peer": false,
+      "population_identity": true,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "spawn_payload_capture": "getData",
+      "spawn_payload_apply": "loadData",
+      "fields": [
+        {
+          "name": "isOpened",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "powered",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "canUse",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": []
+    },
+    {
+      "class": "/Game/objects/panel_radar.panel_radar_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "None",
+      "send_hz": 10,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "radarElement.zoom",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "radarElement.offset",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "radarElement.hasRadar",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        },
+        {
+          "name": "widget.consoleLine",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0,
+          "on_rep": "fixLog"
+        }
+      ],
+      "routed": []
+    },
+    {
+      "class": "/Game/objects/droneConsole.droneConsole_C",
+      "source": "blueprint",
+      "include_children": true,
+      "authority": "Host",
+      "presence": "BindExisting",
+      "preset": "None",
+      "send_hz": 5,
+      "relevancy_radius": 0,
+      "per_peer": false,
+      "population_identity": false,
+      "key_continuity": false,
+      "kinematic_receivers": false,
+      "interp_type": 0,
+      "fields": [
+        {
+          "name": "opened",
+          "condition": "OnChange",
+          "quant": "Float32",
+          "interp": false,
+          "mode": 0
+        }
+      ],
+      "routed": []
     }
   ]
 }

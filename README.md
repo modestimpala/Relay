@@ -55,7 +55,9 @@ To try it, rename `RelayExampleUI.pak.example` to `RelayExampleUI.pak` inside:
 
 `%AppData%\r2modmanPlus-local\VotV\profiles\<profile>\shimloader\pak\Moddy-Relay`
 
-Hosts must also set `allow_listen=1` in `relay_net.ini`.
+Hosting asks for permission the first time: press Host, allow it in the
+Windows prompt, then press Host again. `allow_listen=1` in `relay_net.ini`
+does the same thing without a prompt.
 
 Raw, uncooked assets for mod authors are in the release's `editor` folder and
 on GitHub.
@@ -117,32 +119,25 @@ struct fields may be missing. Replace both before debugging the gameplay mod.
 
 ### Host
 
-1. Copy `relay_net.ini.example` to
-   `<profile>/shimloader/cfg/relay_net.ini`.
-2. Change only:
+1. Start hosting in a gameplay mod. The first try gets refused, and a
+   Windows prompt asks if this PC can host. 
+2. Pick **Allow hosting**, then press Host again. Relay saves this choice as
+   `allow_listen=1` in `<profile>/shimloader/cfg/relay_net.ini` (it creates the
+   file if needed) and won't ask again. **Allow once** works the same way but
+   only until you close the game. Set `allow_listen=0` to turn it off again.
+3. Open the session's UDP port on the host's firewall. Hosting over the
+   Internet also needs that port forwarded on the router. If the mod uses LAN
+   discovery, also open UDP `Port + 1` — e.g., session port `7777` needs
+   `7778` open for LAN search. LAN discovery isn't used for Internet games.
+4. Share the friend code (or a reachable `host:port`) and the password, if any.
 
-   ```ini
-   allow_listen=1
-   ```
+Editing the INI is optional. `allow_listen=1` in the ini to skip the prompt. Relay owns the prompt, while gameplay mods sets the port, password, peer limit,
+bind/public addresses, and authority rules via Blueprint nodes.
 
-3. Allow the session's UDP port through the host firewall. Direct Internet
-   hosting also requires forwarding that port on the router. If the gameplay
-   mod uses LAN discovery, allow UDP `Port + 1` through the firewall too. For
-   example, a session on UDP `7777` answers LAN searches on UDP `7778`. LAN
-   discovery is not used for Internet connections.
-4. Start hosting through the gameplay mod.
-5. Share either the friend code shown by the mod or a reachable `host:port`,
-   plus the password if one was set. `Relay_NetFriendCode` can provide the
-   friend code when the mod does not display it directly.
-
-`allow_listen=1` is the only required player-side INI change. The gameplay mod
-supplies the port, password, peer limit, bind/public addresses, and authority
-policy through Blueprint nodes.
-
-A shared password authenticates a peer. By default, a passwordless peer may
-connect but cannot request temporary authority over lease-backed objects.
-`AllowPasswordlessAuthority=true` removes that restriction for every connected
-peer. Use it only for a trusted private session.
+A shared password lets a peer connect. Without a password, a peer can still
+join but can't request temporary authority over lease-backed objects. Setting
+`AllowPasswordlessAuthority=true` removes that limit for everyone; only use
+this for a trusted private session.
 
 ### Join
 
@@ -213,8 +208,9 @@ Relay_NetHost(
 - `Reason`: synchronous host refusal, such as missing listen permission, an
   invalid option, or a port that could not bind.
 
-`Relay_NetHost` returns null on synchronous failure. Display `Reason`; do not
-replace it with a hard-coded guess.
+`Relay_NetHost` returns null when it fails right away. Always display `Reason`
+instead of a custom message. If Windows prompts for hosting permission on the
+first attempt, approve it and retry.
 
 ### Connect
 
@@ -398,7 +394,8 @@ instead of rescanning the world. `Relay_NetRuleBoundActors` is the current
 snapshot for UI or late initialization.
 
 Large rule sets can live in `shimloader/cfg/relay_rules.json`; set
-`rules_profile=relay_rules.json` in the public INI. Every peer must use the same
+`rules_profile=relay_rules.json` in the public INI. The file is read only when
+that key names it, and its rows outrank Blueprint rows for the same class. Every peer must use the same
 rule contract.
 
 When a ModActor already has the full JSON document as a string, call
@@ -409,9 +406,32 @@ valid document returns `true`; malformed rows inside it are logged and skipped.
 Loading the same semantic document again in one world is a successful no-op.
 Rules are cleared on map travel, so each new ModActor must still declare them
 again for the new world.
-An explicit `Relay_NetBindClass` rule still takes priority over a profile rule
-for the same class. Load the same accepted rules on every peer before
-replication starts.
+
+JSON defaults and Blueprint rules may coexist. Precedence applies to the
+**whole class rule**, regardless of load order:
+
+| Same-class declarations | Effective rule |
+|---|---|
+| Identical | Shared; no duplicate replication |
+| JSON + differing `Relay_NetBindClass` | Blueprint replaces JSON |
+| Different, same priority | Existing rule stays; incoming rule conflicts |
+
+A Blueprint override replaces the entire JSON rule; it does not inherit omitted
+fields, routed functions, or quiesce settings. This applies to JSON loaded from
+a file or a ModActor string. Load the same effective rules on every peer.
+
+Overrides are informational and counted separately from invalid rules and
+conflicts. Conflict diagnostics show both sources and their differences. Calls
+from one ModActor can conflict just like calls from different mods. Blueprint
+sources identify the caller object/function and, when available, its bytecode
+offset; file sources identify the JSON path.
+
+With `rules_dump=1`, `relay_rules_dump.json` includes the effective rules,
+their `declaration_sources`, and `decisions` for overrides and conflicts. Each
+decision records the rejected declaration and its differences; `source` shows
+the winning priority when holders are mixed. Dump metadata is informational:
+reloading a dump creates JSON baselines, and editing metadata does not create
+another holder or grant Blueprint priority.
 
 ### Classes that must stay local
 
@@ -666,6 +686,8 @@ exclude_classes=
 exclude_class_trees=
 ```
 
+`allow_listen` is the hosting opt-in. Relay auto-writes `allow_listen=1` on permission prompts.
+
 Set `log_votv_hints=1` only while correlating VotV popup text with UE4SS logs.
 It is `0` by default, so Relay does not install the hint tap.
 
@@ -692,7 +714,7 @@ Set `enabled=0` to rule gating out of a bad session. Set
 
 | Symptom | Action |
 |---|---|
-| Host returns null | Display the Host node's `Reason`. Usually `allow_listen=1` is absent or the UDP port could not bind. |
+| Host returns null | Display the Host node's `Reason`. |
 | Connect handle returns but nothing happens | Bind `OnConnect`, `OnDisconnect`, and `OnError`. Connect is asynchronous. Check the host firewall/forwarding and address. |
 | Connected but no actors sync | Read `Relay_NetWorldStatus.Reason`. Load the same map/save and declare the same rules. |
 | Friend code is empty | Read `Relay_NetFriendCode.Reason`. Supply a reachable PublicAddress or configure rendezvous. |
