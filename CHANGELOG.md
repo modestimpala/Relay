@@ -1,3 +1,8 @@
+# 0.9.1
+
+- Performance: implemented cached class lookup to help FPS. 
+
+
 # 0.9.0
 
 ## Voices of the Void gameplay / Default Example Rules
